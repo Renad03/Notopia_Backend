@@ -1,27 +1,27 @@
 const { MongoClient } = require('mongodb');
 
-async function main() {
-  // Connection URI (replace with your MongoDB connection string)
-  const uri = "mongodb+srv://utopiahrzao:owM3cZSE2LcaF4vI@cluster0.ytttcc1.mongodb.net/";
+// Connection URL
+const url = 'mongodb+srv://utopiahrzao:owM3cZSE2LcaF4vI@cluster0.ytttcc1.mongodb.net/Utopia';
+const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
 
-  // Create a new MongoClient
-  const client = new MongoClient(uri);
+// Database Name
+const dbName = 'Utopia';
 
+async function connectToDatabase() {
   try {
-    // Connect to the MongoDB cluster
+    // Connect the client to the server
     await client.connect();
+    console.log("Connected successfully to MongoDB server");
 
-    // Select the database (Utopia)
-    const database = client.db('Utopia');
+    // Select the database
+    const db = client.db(dbName);
 
-    // Select the collection (e.g., 'users')
-    const collection = database.collection('users');
-
-
-  } finally {
-    // Close the connection to the MongoDB cluster
-    await client.close();
+    // You can now perform operations on the database
+    return db;
+  } catch (err) {
+    console.error("Failed to connect to MongoDB", err);
   }
 }
 
-main().catch(console.error);
+// Export the connect function to use it in other parts of your app
+module.exports = connectToDatabase;
