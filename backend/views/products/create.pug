@@ -1,0 +1,60 @@
+extends ../layout.pug
+
+block content
+  //- Form Container
+  div(class='w-full max-w-3xl bg-white shadow-md rounded-lg p-6')
+    //- Heading
+    h1(class='text-2xl font-bold mb-4')= product ? 'Edit Product' : 'Create New Product'
+
+    //- Form
+    form(method='post', action=product ? `/products/edit/${product._id}` : '/products/create')
+      //- Product Title
+      div(class='mb-4')
+        label(for='name' class='block text-gray-700 font-bold mb-2') Title
+        input(type='text', id='name', name='name', value=product ? product.name : '', required, class='w-full p-2 border border-gray-300 rounded')
+
+      //- Price 
+      div(class='mb-4')
+        label(for='price' class='block text-gray-700 font-bold mb-2') Price
+        input(type='number', id='price', name='price', value=product ? product.price : '', required, class='w-full p-2 border border-gray-300 rounded') 
+
+      //- Stock
+      div(class='mb-4')
+        label(for='stock' class='block text-gray-700 font-bold mb-2') Stock
+        input(type='number', id='stock', name='stock', value=product ? product.stock : '', required, min='0', class='w-full p-2 border border-gray-300 rounded')
+
+      //- Description 
+      div(class='mb-4')
+        label(for='description' class='block text-gray-700 font-bold mb-2') Description
+        input(type='text', id='description', name='description', value=product ? product.description : '', required, class='w-full p-2 border border-gray-300 rounded') 
+
+      //- Number of Sales 
+      div(class='mb-4')
+        label(for='number_of_sales' class='block text-gray-700 font-bold mb-2') Number of Sales
+        input(type='number', id='number_of_sales', name='number_of_sales', value=product ? product.number_of_sales : '', class='w-full p-2 border border-gray-300 rounded') 
+
+      //- Discount Percentage 
+      div(class='mb-4')
+        label(for='discount_percentage' class='block text-gray-700 font-bold mb-2') Discount Percentage
+        input(type='number', id='discount_percentage', name='discount_percentage', value=product ? product.discount_percentage : '', class='w-full p-2 border border-gray-300 rounded') 
+
+      //- Category 
+      div(class='mb-4')
+        label(for='category' class='block text-gray-700 font-bold mb-2') Category
+        input(type='text', id='category', name='category', value=product ? product.category_id : '', class='w-full p-2 border border-gray-300 rounded')
+
+      //- Expired
+      div(class='mb-4')
+        label(for='expired' class='block text-gray-700 font-bold mb-2') Expired
+        select(id='expired', name='expired', class='w-full p-2 border border-gray-300 rounded')
+          option(value='true', selected=product ? product.expired === true : false) Yes
+          option(value='false', selected=product ? product.expired === false : true) No
+
+      //- Image Upload
+      div(class='mb-4')
+        label(for='images_url' class='block text-gray-700 font-bold mb-2') Product Images
+        input(type='file', id='images_url', name='images_url', multiple, class='w-full p-2 border border-gray-300 rounded')
+
+      //- Submit Button
+      div(class='flex justify-end')
+        button(type='submit', class='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600')= product ? 'Update Product' : 'Submit'

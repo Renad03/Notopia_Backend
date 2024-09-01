@@ -1,20 +1,20 @@
 const mongoose = require("mongoose");
 const db = require("../config/db.js");
-
+const bcrypt = require("bcrypt");
 const { Schema } = mongoose;
 
 // Define the User Schema
 const userSchema = new Schema(
   {
-    First_Name: {
+    first_name: {
       type: String,
       required: true,
     },
-    Last_Name: {
+    last_name: {
       type: String,
       required: true,
     },
-    Phone_Number: {
+    phone: {
       type: String,
       required: true,
       unique: true,
@@ -23,22 +23,22 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    Date_Of_Birth: {
+    date_of_birth: {
       type: Date,
     },
-    Gender: {
+    gender: {
       type: String,
       enum: ["Male", "Female", "Other"],
       default: "Other",
       required: true,
     },
-    Wishlist: [
+    wishlist: [
       {
         type: Schema.Types.ObjectId,
         ref: "Product", // Assuming Wishlist items are references to a Product model
       },
     ],
-    Cart: [
+    cart: [
       {
         product: {
           type: Schema.Types.ObjectId,
@@ -50,7 +50,7 @@ const userSchema = new Schema(
         },
       },
     ],
-    Vouchers: [
+    vouchers: [
       {
         code: {
           type: String,
@@ -63,9 +63,9 @@ const userSchema = new Schema(
         },
       },
     ],
-    Orders_History: [
+    orders_history: [
       {
-        orderId: {
+        order_id: {
           type: Schema.Types.ObjectId,
           ref: "Order",
         },
@@ -77,7 +77,7 @@ const userSchema = new Schema(
         },
       },
     ],
-    Addresses: [
+    addresses: [
       {
         street: {
           type: String,
@@ -101,6 +101,18 @@ const userSchema = new Schema(
     timestamps: true, // Automatically adds createdAt and updatedAt fields
   }
 );
+// Hash the password with cost of 12
+userSchema.pre("save", async function () {
+  try {
+    var user = this;
+    const salt = await bcrypt.hash(user.password, 12);
+    const haspass = await bcrypt.hash(user.password, salt);
+    user.password=haspass;
+  } catch (e) {
+    throw e;
+  }
+});
+
 // userSchema.pre('save', async function(next) {
 //     // Only run this function if password was actually modified
 //     if (!this.isModified('password')) return next();

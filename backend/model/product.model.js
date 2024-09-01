@@ -1,39 +1,38 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-// Define the Product Schema
 const productSchema = new Schema(
   {
-    Product_Name: {
+    name: {
       type: String,
       required: true, // The name of the product must be provided
     },
-    Price: {
-      type: String, // Store price as a string with currency (e.g., "500EGP")
+    price: {
+      type: Number, // Store price as a number
       required: true, // Price must be provided
     },
-    Stock: {
+    stock: {
       type: Number, // Stock is represented as a number
       required: true, // Stock must be provided
     },
-    Description: {
+    description: {
       type: String, // Description of the product
       required: true, // Description must be provided
     },
-    Number_Of_Sales: {
+    number_of_sales: {
       type: Number, // The number of sales is represented as a number
       default: 0, // Default value is 0 if not provided
     },
-    Discount_Percentage: {
-      type: String, // Store discount percentage as a string (e.g., "0%")
-      required: true, // Discount percentage must be provided
+    discount_percentage: {
+      type: Number, // Store discount percentage as a number
+      // required: true, // Discount percentage must be provided
     },
-    Category_ID: {
+    category_id: {
       type: Schema.Types.ObjectId, // References the ID of the category
       ref: "Category", // Assuming you have a Category model
-      required: true, // Category ID must be provided
+      // required: true, // Category ID must be provided
     },
-    Images_URL: {
+    images_url: {
       type: [String], // An array of strings to store URLs of product images
       default: [], // Default is an empty array
     },
@@ -43,7 +42,11 @@ const productSchema = new Schema(
   }
 );
 
-// Create the Product Model
-const ProductModel = mongoose.model("product", productSchema);
+const ProductModel = mongoose.model("Product", productSchema);
 
-module.exports = ProductModel;
+async function createProduct(data) {
+  const product = new ProductModel(data);
+  return await product.save();
+}
+
+module.exports = { ProductModel, createProduct };
